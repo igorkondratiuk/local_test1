@@ -5,29 +5,36 @@ import { assert } from 'chai'
 describe('price data', () => {
 
     let data;
-    let pyramida=[];
+    let pyramid=[];
     let n=10;
     let max=10;
-    let a_pos=[0]
-    let a_val=[]
+     let a_val_max=[]
+     let a_val_min=[]
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
-    function  get2Value(array,n){
+    function  get2ValueMax(array,n){
        let arr=[]
-        if(array[n]>=array[n+1]) arr.push(array[n],n)
+        if(array[n] > array[n+1]) arr.push(array[n],n)
           else arr.push(array[n+1],n+1)
         return arr
     }
-    function  paintPyramida(array_pyramida,array_value){
+    function  get2ValueMin(array,n){
+        let arr=[]
+        if(array[n] < array[n+1]) arr.push(array[n],n)
+        else arr.push(array[n+1],n+1)
+        return arr
+    }
+    function  paintPyramid(array_pyramid,array_value,a_min){
+
         for(let i=0;i<n;i++){
             let s='';
             for(let j=n;j>i;j--) { s += " "; }
             if(array_value)
-             console.log(s+array_pyramida[i]+s+array_value[i])
+             console.log(s+array_pyramid[i]+s+array_value[i]+" / "+a_min[i])
             else
-                console.log(s+array_pyramida[i])
+                console.log(s+array_pyramid[i])
         }
     }
 
@@ -58,20 +65,44 @@ describe('price data', () => {
            for(let j=0; j<i; j++) {
                arr.push(getRandomInt(max))
            }
-           pyramida.push(arr)
+           pyramid.push(arr)
        }
     })
 
-    it('find way',()=>{
-       a_val.push(pyramida[0][0])
+    it('find way max min',()=>{
+        let a_pos_max=[0]
+        a_val_max.push(pyramid[0][0])
 
        for(let i=1; i < n; i++){
-          let l=get2Value(pyramida[i],a_pos[a_pos.length-1])
-           a_pos.push(l[1])
-           a_val.push(l[0])
+          let l=get2ValueMax(pyramid[i],a_pos_max[a_pos_max.length-1])
+           a_pos_max.push(l[1])
+           a_val_max.push(l[0])
        }
-        paintPyramida(pyramida,a_val)
+
+        let a_pos_min=[0]
+        a_val_min.push(pyramid[0][0])
+
+        for(let i=1; i < n; i++){
+            let l=get2ValueMin(pyramid[i],a_pos_min[a_pos_min.length-1])
+            a_pos_min.push(l[1])
+            a_val_min.push(l[0])
+        }
     })
+
+    it('paint pyramid',()=>{
+        console.log(" pyramid max / min")
+        paintPyramid(pyramid,a_val_max,a_val_min)
+        let max=a_val_max.reduce((a, b) => a + b)
+        let min=a_val_min.reduce((a, b) => a + b)
+        console.log("max=",max,"/ min=",min)
+
+    })
+
+    it('check all',()=>{
+
+    })
+
+
 
 
 });
